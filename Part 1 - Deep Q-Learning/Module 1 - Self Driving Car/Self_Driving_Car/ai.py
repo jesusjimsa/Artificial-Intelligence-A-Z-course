@@ -61,3 +61,9 @@ class Dqn():
         self.last_state = torch.Tensor(input_size).unsqueeze(0)
         self.last_action = 0
         self.last_reward = 0
+
+    def select_action(self, state):
+        probs = F.softmax(self.model(Variable(state, volatile=True)) * 7)   # T = 7
+        action = probs.multinomial()
+
+        return action.data[0, 0]
