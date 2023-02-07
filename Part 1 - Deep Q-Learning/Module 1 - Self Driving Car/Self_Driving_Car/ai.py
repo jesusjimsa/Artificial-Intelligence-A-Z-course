@@ -1,14 +1,14 @@
 # AI for Self Driving Car
 
 # Importing the libraries
-import numpy as np
+# import numpy as np
 import random
 import os
 import torch
-import torch.nn as nn
+from torch import nn
 import torch.nn.functional as F
-import torch.optim as optim
-import torch.autograd as autograd
+from torch import optim
+# from torch import autograd
 from torch.autograd import Variable
 
 
@@ -30,7 +30,7 @@ class Network(nn.Module):
 
 
 # Implementing Expirience Replay
-class ReplayMemory(object):
+class ReplayMemory():
 
     def __init__(self, capacity):
         self.capacity = capacity    # Maximum number of transitions in our memory
