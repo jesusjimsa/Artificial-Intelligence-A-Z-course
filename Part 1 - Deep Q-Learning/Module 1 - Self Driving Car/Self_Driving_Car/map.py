@@ -78,24 +78,19 @@ class Car(Widget):
         self.pos = Vector(*self.velocity) + self.pos
         self.rotation = rotation
         self.angle = self.angle + self.rotation
-
         self.sensor1 = Vector(30, 0).rotate(self.angle) + self.pos
         self.sensor2 = Vector(30, 0).rotate((self.angle+30) % 360) + self.pos
         self.sensor3 = Vector(30, 0).rotate((self.angle-30) % 360) + self.pos
-
-        self.signal1 = int(np.sum(sand[int(self.sensor1_x)-10:int(self.sensor1_x)+10,
-                                       int(self.sensor1_y)-10:int(self.sensor1_y)+10]))/400.
-        self.signal2 = int(np.sum(sand[int(self.sensor2_x)-10:int(self.sensor2_x)+10,
-                                       int(self.sensor2_y)-10:int(self.sensor2_y)+10]))/400.
-        self.signal3 = int(np.sum(sand[int(self.sensor3_x)-10:int(self.sensor3_x)+10,
-                                       int(self.sensor3_y)-10:int(self.sensor3_y)+10]))/400.
-
+        self.signal1 = int(np.sum(sand[int(self.sensor1_x)-10:int(
+            self.sensor1_x)+10, int(self.sensor1_y)-10:int(self.sensor1_y)+10]))/400.
+        self.signal2 = int(np.sum(sand[int(self.sensor2_x)-10:int(
+            self.sensor2_x)+10, int(self.sensor2_y)-10:int(self.sensor2_y)+10]))/400.
+        self.signal3 = int(np.sum(sand[int(self.sensor3_x)-10:int(
+            self.sensor3_x)+10, int(self.sensor3_y)-10:int(self.sensor3_y)+10]))/400.
         if self.sensor1_x > longueur-10 or self.sensor1_x < 10 or self.sensor1_y > largeur-10 or self.sensor1_y < 10:
             self.signal1 = 1.
-
         if self.sensor2_x > longueur-10 or self.sensor2_x < 10 or self.sensor2_y > largeur-10 or self.sensor2_y < 10:
             self.signal2 = 1.
-
         if self.sensor3_x > longueur-10 or self.sensor3_x < 10 or self.sensor3_y > largeur-10 or self.sensor3_y < 10:
             self.signal3 = 1.
 
@@ -143,7 +138,8 @@ class Game(Widget):
         xx = goal_x - self.car.x
         yy = goal_y - self.car.y
         orientation = Vector(*self.car.velocity).angle((xx, yy))/180.
-        last_signal = [self.car.signal1, self.car.signal2, self.car.signal3, orientation, -orientation]
+        last_signal = [self.car.signal1, self.car.signal2,
+                       self.car.signal3, orientation, -orientation]
         action = brain.update(last_reward, last_signal)
         scores.append(brain.score())
         rotation = action2rotation[action]
@@ -153,10 +149,10 @@ class Game(Widget):
         self.ball2.pos = self.car.sensor2
         self.ball3.pos = self.car.sensor3
 
-        if sand[int(self.car.x),int(self.car.y)] > 0:
+        if sand[int(self.car.x), int(self.car.y)] > 0:
             self.car.velocity = Vector(1, 0).rotate(self.car.angle)
             last_reward = -1
-        else: # otherwise
+        else:  # otherwise
             self.car.velocity = Vector(6, 0).rotate(self.car.angle)
             last_reward = -0.2
             if distance < last_distance:
@@ -180,9 +176,8 @@ class Game(Widget):
             goal_y = self.height-goal_y
         last_distance = distance
 
+
 # Adding the painting tools
-
-
 class MyPaintWidget(Widget):
 
     def on_touch_down(self, touch):
@@ -195,7 +190,7 @@ class MyPaintWidget(Widget):
             last_y = int(touch.y)
             n_points = 0
             length = 0
-            sand[int(touch.x),int(touch.y)] = 1
+            sand[int(touch.x), int(touch.y)] = 1
 
     def on_touch_move(self, touch):
         global length, n_points, last_x, last_y
@@ -207,13 +202,13 @@ class MyPaintWidget(Widget):
             n_points += 1.
             density = n_points/(length)
             touch.ud['line'].width = int(20 * density + 1)
-            sand[int(touch.x) - 10: int(touch.x) + 10, int(touch.y) - 10: int(touch.y) + 10] = 1
+            sand[int(touch.x) - 10: int(touch.x) + 10,
+                 int(touch.y) - 10: int(touch.y) + 10] = 1
             last_x = x
             last_y = y
 
+
 # Adding the API Buttons (clear, save and load)
-
-
 class CarApp(App):
 
     def build(self):
