@@ -52,8 +52,20 @@ class CNN(nn.Module):  # Convolutional Neural Network
 
         return x
 
+
 # Making the body
 
+class SoftmaxBody(nn.Module):
+
+    def __init__(self, Temperature):
+        super(SoftmaxBody, self).__init__()
+        self.Temperature = Temperature  # The higher the temperature, the less of the other actions we will do
+
+    def forward(self, outputs):
+        probs = F.softmax(outputs * self.Temperature)
+        actions = probs.multinomial()
+
+        return actions
 
 # Making the AI
 
