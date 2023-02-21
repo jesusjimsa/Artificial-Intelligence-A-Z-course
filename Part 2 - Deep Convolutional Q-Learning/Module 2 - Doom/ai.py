@@ -67,7 +67,20 @@ class SoftmaxBody(nn.Module):
 
         return actions
 
+
 # Making the AI
 
+class AI:
+
+    def __init__(self, brain, body):
+        self.brain = brain
+        self.body = body
+
+    def __call__(self, inputs):
+        input = Variable(torch.from_numpy(np.array(inputs, dtype=np.float32)))
+        output = self.brain(input)
+        actions = self.body(output)
+
+        return actions.data.numpy()
 
 # Part 2 - Training the AI with Deep Convolutional Q-Learning
