@@ -9,6 +9,7 @@ class SharedAdam(optim.Adam):
 
     def __init__(self, params, lr=1e-3, betas=(0.9, 0.999), eps=1e-8, weight_decay=0):
         super(SharedAdam, self).__init__(params, lr, betas, eps, weight_decay)
+
         for group in self.param_groups:
             for p in group['params']:
                 state = self.state[p]
@@ -26,6 +27,7 @@ class SharedAdam(optim.Adam):
 
     def step(self):
         loss = None
+
         for group in self.param_groups:
             for p in group['params']:
                 if p.grad is None:
@@ -45,7 +47,7 @@ class SharedAdam(optim.Adam):
                 denom = exp_avg_sq.sqrt().add_(group['eps'])
                 bias_correction1 = 1 - beta1 ** state['step'][0]
                 bias_correction2 = 1 - beta2 ** state['step'][0]
-                step_size = group['lr'] *  math.sqrt(bias_correction2) / bias_correction1
+                step_size = group['lr'] * math.sqrt(bias_correction2) / bias_correction1
                 p.data.addcdiv_(-step_size, exp_avg, denom)
 
         return loss
